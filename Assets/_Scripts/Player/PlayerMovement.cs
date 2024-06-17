@@ -44,6 +44,9 @@ public class PlayerMovement : MonoBehaviour
     public float maxSlopeAngle;
     private RaycastHit _slopeHit;
     private bool _exitingSlope;
+
+    [Header("Audio Stuff")]
+    public AudioClip jumpClip;
     
 
     public Transform orientation;
@@ -273,6 +276,7 @@ public class PlayerMovement : MonoBehaviour
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
 
         _rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        SoundFXManager.instnace.PlaySoundAtPosition(jumpClip, transform.position, 1f);
     }
     private void ResetJump()
     {

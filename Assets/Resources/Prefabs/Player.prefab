@@ -124,10 +124,11 @@ MonoBehaviour:
   sprintKey: 304
   crouchKey: 306
   playerHeight: 2
-  whatIsGround:
+  groundLayer:
     serializedVersion: 2
     m_Bits: 64
   maxSlopeAngle: 45
+  jumpClip: {fileID: 8300000, guid: 2a4a49a0b3581c34195cc47bcbf71d34, type: 3}
   orientation: {fileID: 6469284367771551688}
   state: 0
   sliding: 0
@@ -148,7 +149,7 @@ MonoBehaviour:
   playerObj: {fileID: 5527959295549235696}
   maxSlideTime: 0.75
   slideForce: 200
-  slideYScale: 0.65
+  slideYScale: 0.5
   slideKey: 99
 --- !u!114 &1004243786425969117
 MonoBehaviour:
@@ -164,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -531,7 +532,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

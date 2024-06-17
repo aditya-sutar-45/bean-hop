@@ -153,5 +153,6 @@ public class WallRunning : MonoBehaviour {
 
         _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
         _rb.AddForce(force, ForceMode.Impulse);
+        SoundFXManager.instnace.PlaySoundAtPosition(_pm.jumpClip, transform.position, 1f);
     }
 }
