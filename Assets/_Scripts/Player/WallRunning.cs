@@ -112,9 +112,9 @@ public class WallRunning : MonoBehaviour {
 
         _wallRunTimer = maxWallRunTime;
 
-        cam.ManageFOV(90f);
-        if (_wallLeft) cam.ManageTilting(-5f);
-        if (_wallRight) cam.ManageTilting(5f);
+        cam.fov(_pm.wallRunFov);
+        if (_wallLeft) cam.tilt(-_pm.wallRunTilt);
+        if (_wallRight) cam.tilt(_pm.wallRunTilt);
     }
     private void WallRunMovement() {
         _rb.useGravity = false;
@@ -140,8 +140,8 @@ public class WallRunning : MonoBehaviour {
     private void StopWallRun() {
         _pm.wallRunning = false;
 
-        cam.ManageFOV(80f);
-        cam.ManageTilting(0f);
+        cam.fov(_pm.normalFov);
+        cam.tilt(0f);
     }
 
     private void WallJump() {

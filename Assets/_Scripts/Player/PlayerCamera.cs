@@ -28,11 +28,11 @@ public class PlayerCamera : MonoBehaviour {
         orientation.rotation = Quaternion.Euler(0f, _yRotation, 0f);
     }
 
-    public void ManageFOV(float endValue) {
+    public void fov(float endValue) {
         GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
     }
 
-    public void ManageTilting(float zTilt) {
+    public void tilt(float zTilt) {
         transform.DOLocalRotate(new Vector3(0f, 0f, zTilt), 0.25f);
     }
 }

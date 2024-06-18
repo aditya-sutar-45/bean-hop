@@ -1,23 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
+    public bool canSprint = true;
+    public bool canCrouch = true;
+
+    [Header("Movement Stuff")]
     private float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
-    public float slideSpeed;
+    public float maxSlideSpeed;
     public float wallRunSpeed;
-
+    public float speedIncreaseMultiplier;
+    public float slopeIncreaseMultiplier;
+    public float groundDrag;
     private float _desiredMoveSpeed;
     private float _lastDesiredMoveSpeed;
 
-    public float speedIncreaseMultiplier;
-    public float slopeIncreaseMultiplier;
-
-    public float groundDrag;
 
     [Header("Jumping")]
     public float jumpForce;
@@ -47,15 +49,25 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Audio Stuff")]
     public AudioClip jumpClip;
-    
 
+    [Header("Camera Options")]
+    public float normalFov;
+    public float sprintFov;
+    public float slideFov;
+    public float wallRunFov;
+    public float wallRunTilt;
+
+    [Header("UI")]
+    [SerializeField] private TMP_Text speedText;
+
+    [Header("Misc")]
     public Transform orientation;
 
     private float _horizontalInput;
     private float _verticalInput;
 
     private Vector3 _moveDirection;
-
+    private PlayerCamera _cam;
     private Rigidbody _rb;
 
     public MovementState state;
@@ -75,11 +87,13 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _cam = Camera.main.GetComponent<PlayerCamera>();
         _rb.freezeRotation = true;
 
         _readyToJump = true;
 
         _startYScale = transform.localScale.y;
+        _cam.fov(normalFov);
     }
 
     private void Update()
@@ -90,6 +104,8 @@ public class PlayerMovement : MonoBehaviour
         MyInput();
         SpeedControl();
         StateHandler();
+
+        speedText.text = "Speed: " + _rb.velocity.magnitude.ToString("00.00") + " b/s";
 
         // handle drag
         if (_isGrounded)
@@ -119,16 +135,16 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // start crouch
-        if (Input.GetKeyDown(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            _rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
+        if (canCrouch) {
+            if (Input.GetKeyDown(crouchKey)) {
+                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+                _rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            }
 
-        // stop crouch
-        if (Input.GetKeyUp(crouchKey))
-        {
-            transform.localScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
+            // stop crouch
+            if (Input.GetKeyUp(crouchKey)) {
+                transform.localScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
+            }
         }
     }
 
@@ -143,26 +159,29 @@ public class PlayerMovement : MonoBehaviour
         if (sliding)
         {
             state = MovementState.sliding;
+            _cam.fov(slideFov);
 
             if (OnSlope() && _rb.velocity.y < 0.1f)
-                _desiredMoveSpeed = slideSpeed;
+                _desiredMoveSpeed = maxSlideSpeed;
 
             else
                 _desiredMoveSpeed = sprintSpeed;
         }
 
         // Mode - Crouching
-        else if (Input.GetKey(crouchKey))
+        else if (Input.GetKey(crouchKey) && canCrouch)
         {
             state = MovementState.crouching;
             _desiredMoveSpeed = crouchSpeed;
+            _cam.fov(normalFov);
         }
 
         // Mode - Sprinting
-        else if(_isGrounded && Input.GetKey(sprintKey))
+        else if(_isGrounded && Input.GetKey(sprintKey) && canSprint)
         {
             state = MovementState.sprinting;
             _desiredMoveSpeed = sprintSpeed;
+            _cam.fov(sprintFov);
         }
 
         // Mode - Walking
@@ -170,12 +189,14 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.walking;
             _desiredMoveSpeed = walkSpeed;
+            _cam.fov(normalFov);
         }
 
         // Mode - Air
         else
         {
             state = MovementState.air;
+            _cam.fov(normalFov);
         }
 
         // check if desiredMoveSpeed has changed drastically
