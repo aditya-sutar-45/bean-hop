@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,7 +19,6 @@ public class PlayerMovement : MonoBehaviour
     public float groundDrag;
     private float _desiredMoveSpeed;
     private float _lastDesiredMoveSpeed;
-
 
     [Header("Jumping")]
     public float jumpForce;
@@ -101,10 +100,11 @@ public class PlayerMovement : MonoBehaviour
         // ground check
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundLayer);
 
-        MyInput();
+        HandleInputs();
         SpeedControl();
         StateHandler();
 
+        // speed text
         speedText.text = "Speed: " + _rb.velocity.magnitude.ToString("00.00") + " b/s";
 
         // handle drag
@@ -112,6 +112,11 @@ public class PlayerMovement : MonoBehaviour
             _rb.drag = groundDrag;
         else
             _rb.drag = 0;
+
+        // reload the scene
+        if (Input.GetKeyDown(KeyCode.R)) {
+            ReloadScene();
+        }
     }
 
     private void FixedUpdate()
@@ -119,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
     }
 
-    private void MyInput()
+    private void HandleInputs()
     {
         _horizontalInput = Input.GetAxisRaw("Horizontal");
         _verticalInput = Input.GetAxisRaw("Vertical");
@@ -196,7 +201,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             state = MovementState.air;
-            _cam.fov(normalFov);
+            // _cam.fov(normalFov);
         }
 
         // check if desiredMoveSpeed has changed drastically
@@ -304,6 +309,11 @@ public class PlayerMovement : MonoBehaviour
         _readyToJump = true;
 
         _exitingSlope = false;
+    }
+
+    private void ReloadScene() {
+        int currentSceneIndex =  SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex);
     }
 
     public bool OnSlope()

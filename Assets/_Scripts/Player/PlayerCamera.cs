@@ -29,10 +29,12 @@ public class PlayerCamera : MonoBehaviour {
     }
 
     public void fov(float endValue) {
+        if (GetComponent<Camera>() == null) return;
         GetComponent<Camera>().DOFieldOfView(endValue, 0.25f);
     }
 
     public void tilt(float zTilt) {
+        if (GetComponent<Camera>() == null) return;
         transform.DOLocalRotate(new Vector3(0f, 0f, zTilt), 0.25f);
     }
 }
