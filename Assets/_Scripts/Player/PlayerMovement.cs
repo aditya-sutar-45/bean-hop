@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
     private float _horizontalInput;
     private float _verticalInput;
 
-    private Vector3 _moveDirection;
+    [HideInInspector] public Vector3 moveDirection;
     private PlayerCamera _cam;
     private Rigidbody _rb;
 
@@ -248,12 +248,12 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         // calculate movement direction
-        _moveDirection = orientation.forward * _verticalInput + orientation.right * _horizontalInput;
+        moveDirection = orientation.forward * _verticalInput + orientation.right * _horizontalInput;
 
         // on slope
         if (OnSlope() && !_exitingSlope)
         {
-            _rb.AddForce(GetSlopeMoveDirection(_moveDirection) * moveSpeed * 20f, ForceMode.Force);
+            _rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
 
             if (_rb.velocity.y > 0)
                 _rb.AddForce(Vector3.down * 80f, ForceMode.Force);
@@ -261,11 +261,11 @@ public class PlayerMovement : MonoBehaviour
 
         // on ground
         else if(_isGrounded)
-            _rb.AddForce(_moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            _rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
         // in air
         else if(!_isGrounded)
-            _rb.AddForce(_moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            _rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
         // turn gravity off while on slope
         _rb.useGravity = !OnSlope();

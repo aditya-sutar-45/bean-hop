@@ -10,14 +10,15 @@ public class ForwardBoost : MonoBehaviour
         entered = true;
 
         Rigidbody playerRb = other.GetComponentInParent<Rigidbody>();
-        Transform playerOrientation = playerRb.gameObject.GetComponent<PlayerMovement>().orientation;
+        PlayerMovement pm = playerRb.gameObject.GetComponent<PlayerMovement>();
         PlayerCamera playerCam = Camera.main.GetComponent<PlayerCamera>();
+
         if (playerRb == null) {
             Debug.LogError("player rigidbody not found");
             return;
         }
         
-        playerRb.AddForce(playerOrientation.forward * force * 10f, ForceMode.Impulse);
+        playerRb.AddForce(pm.moveDirection * force * 10f, ForceMode.Impulse);
         playerCam.fov(120f);
     }
 
