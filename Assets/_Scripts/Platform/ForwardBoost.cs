@@ -17,8 +17,10 @@ public class ForwardBoost : MonoBehaviour
             Debug.LogError("player rigidbody not found");
             return;
         }
+
+        Vector3 dir = pm.moveDirection != Vector3.zero ? pm.moveDirection : pm.orientation.forward;
         
-        playerRb.AddForce(pm.moveDirection * force * 10f, ForceMode.Impulse);
+        playerRb.AddForce(((dir * force * 10f) + (Vector3.up * 10f)), ForceMode.Impulse);
         playerCam.fov(120f);
     }
 
