@@ -120,6 +120,7 @@ MonoBehaviour:
   jumpForce: 9
   jumpCooldown: 0.25
   airMultiplier: 0.4
+  coyoteTime: 0.2
   crouchSpeed: 5
   crouchYScale: 0.5
   jumpKey: 32
@@ -138,6 +139,7 @@ MonoBehaviour:
   wallRunTilt: 6
   speedText: {fileID: 5487153218178927491}
   orientation: {fileID: 6469284367771551688}
+  moveDirection: {x: 0, y: 0, z: 0}
   state: 0
   sliding: 0
   wallRunning: 0

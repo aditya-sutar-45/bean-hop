@@ -58297,11 +58297,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6819381324075515242, guid: a514c0bdec9e7264585de4caf040104f,
-        type: 3}
-      propertyPath: coyoteTime
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 6920075798598614354, guid: a514c0bdec9e7264585de4caf040104f,
         type: 3}
       propertyPath: m_Name
