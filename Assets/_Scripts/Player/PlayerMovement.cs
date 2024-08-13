@@ -24,6 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
+    public float coyoteTime = 0.2f;
+    private float _coyoteTimeCounter;
     private bool _readyToJump;
 
     [Header("Crouching")]
@@ -100,6 +102,12 @@ public class PlayerMovement : MonoBehaviour
         // ground check
         _isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, groundLayer);
 
+        if (_isGrounded) {
+            _coyoteTimeCounter = coyoteTime;
+        } else {
+            _coyoteTimeCounter -= Time.deltaTime;
+        }
+
         HandleInputs();
         SpeedControl();
         StateHandler();
@@ -130,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
         _verticalInput = Input.GetAxisRaw("Vertical");
 
         // when to jump
-        if(Input.GetKey(jumpKey) && _readyToJump && _isGrounded)
+        if(Input.GetKey(jumpKey) && _readyToJump && _coyoteTimeCounter > 0f)
         {
             _readyToJump = false;
 
@@ -307,7 +315,7 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         _readyToJump = true;
-
+        _coyoteTimeCounter = 0f;
         _exitingSlope = false;
     }
 
